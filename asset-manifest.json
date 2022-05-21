@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.js": "/MoviesTypescript/static/js/main.a3cd515d.js",
+    "static/js/787.5d66766b.chunk.js": "/MoviesTypescript/static/js/787.5d66766b.chunk.js",
+    "index.html": "/MoviesTypescript/index.html",
+    "main.a3cd515d.js.map": "/MoviesTypescript/static/js/main.a3cd515d.js.map",
+    "787.5d66766b.chunk.js.map": "/MoviesTypescript/static/js/787.5d66766b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.a3cd515d.js"
+  ]
+}
