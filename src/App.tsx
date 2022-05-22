@@ -8,10 +8,11 @@ const contextDefaultValues: User = localStorage.getItem("user")
   ? (JSON.parse(localStorage.getItem("user") || "") as User)
   : { id: "", email: "", password: "", token: "" };
 
+
 function App() {
   return (
     <Context.Provider value={contextDefaultValues}>
-      <BrowserRouter>
+      <BrowserRouter basename={process.env.PUBLIC_URL}>
         <SnackbarProvider maxSnack={3}>
           <Router />
         </SnackbarProvider>

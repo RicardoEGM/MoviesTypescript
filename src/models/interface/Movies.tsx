@@ -6,4 +6,5 @@ export interface Movies {
   backdrop_path: string;
   release_date: string;
   vote_count: number;
+  vote_average: number;
 }

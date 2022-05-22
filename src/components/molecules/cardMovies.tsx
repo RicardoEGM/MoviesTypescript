@@ -14,6 +14,8 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Rating from "@mui/material/Rating";
+import { Movies } from "../../models/interface/Movies";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -30,41 +32,45 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export default function RecipeReviewCard() {
+export default function CardMovies(props: { data: Movies }) {
+  const { data } = props;
   const [expanded, setExpanded] = React.useState(false);
+  const [state, setState] = React.useState<Movies>(data);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
+  //TODO: Changes to style
   return (
     <>
-      <Card sx={{ maxWidth: 345 }}>
-        <CardHeader
-          avatar={
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-              R
-            </Avatar>
-          }
-          action={
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-          }
-          title="Shrimp and Chorizo Paella"
-          subheader="September 14, 2016"
-        />
+      <Card
+        style={{
+          backgroundColor: "#f3f3f3",
+          boxShadow: "0px 0px 0px 0px rgb(0 0 0 / 20%)",
+        }}
+      >
         <CardMedia
           component="img"
-          height="194"
-          image="/static/images/cards/paella.jpg"
-          alt="Paella dish"
+          image={`https://image.tmdb.org/t/p/w500/${state.poster_path}`}
+          alt={state.title}
         />
-        <CardContent>
+        <CardContent
+          style={{
+            position: "relative",
+            backgroundColor: "white",
+            marginTop: "-25px",
+            borderRadius: "10px",
+            boxShadow:
+              "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
+          }}
+        >
+          <Typography gutterBottom variant="h5" component="div">
+            {state.title + " - " + state.release_date}
+            <Typography component="legend">Rating</Typography>
+            <Rating name="read-only" value={(state.vote_average/2)} precision={0.5} max={5} readOnly />
+          </Typography>
           <Typography variant="body2" color="text.secondary">
-            This impressive paella is a perfect party dish and a fun meal to
-            cook together with your guests. Add 1 cup of frozen peas along with
-            the mussels, if you like.
+            {state.overview.substr(0, 135) + "..."}
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
