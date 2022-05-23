@@ -1,7 +1,8 @@
 import Axios from "axios";
 
 const instance = Axios.create({
-  baseURL: "https://api.themoviedb.org/3/",
+  baseURL: "https://cors-anywhere.herokuapp.com/https://api.themoviedb.org/3/",
+  withCredentials: false,
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
