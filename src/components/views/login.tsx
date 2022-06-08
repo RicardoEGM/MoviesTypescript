@@ -1,23 +1,21 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Tooltip from "@mui/material/Tooltip";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { User } from "../../models/interface/User";
 import { useSnackbar } from "notistack";
 import { ApiLogin } from "../../api/login";
-
+import { ContextUser } from "../../models/interface/ContextUser";
 
 const theme = createTheme();
 export default function Login() {
+  const userContext = useContext(ContextUser);
   const { enqueueSnackbar } = useSnackbar();
   const defaultUser: User = {
     id: "",
@@ -34,17 +32,24 @@ export default function Login() {
     ApiLogin.Login.GetUserByID(state.email, state.password)
       .then((response) => {
         if (response.status === 200) {
-          setState({ ...state, token: response.data.token });
-          localStorage.setItem("user", JSON.stringify(state));
+          let copyStatus = state;
+          copyStatus.token = response.data.token;
+          setState(copyStatus);
+          localStorage.setItem("user", JSON.stringify(copyStatus));
+          userContext.updateUser(copyStatus);
+          enqueueSnackbar("Login Successful", { variant: "success",  autoHideDuration: 3000 });
         } else {
-          enqueueSnackbar("Login failed", { variant: "error" });
+          enqueueSnackbar("Login failed", { variant: "error",  autoHideDuration: 3000 });
         }
       })
       .catch((error) => {
         console.log(error);
-        enqueueSnackbar("Login failed", { variant: "error" });
+        enqueueSnackbar("Login failed", { variant: "error",  autoHideDuration: 3000 });
       });
   };
+
+  let titleTooltip =
+    "You will be logged in as a guest user, the points or favorite movies you have selected will only be active for 3 days.";
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let copyStatus = { ...state };
@@ -56,7 +61,16 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container
+        component="main"
+        maxWidth="xs"
+        sx={{ boxShadow: 2 }}
+        style={{
+          borderRadius: "10px",
+          paddingBottom: "20px",
+          background: "white",
+        }}
+      >
         <CssBaseline />
         <Box
           sx={{
@@ -66,10 +80,9 @@ export default function Login() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          </Avatar>
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Login
           </Typography>
           <Box
             component="form"
@@ -101,25 +114,16 @@ export default function Login() {
               value={state.password}
               onChange={handleChange}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-            </Grid>
+            <Tooltip title={titleTooltip}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign In
+              </Button>
+            </Tooltip>
           </Box>
         </Box>
       </Container>

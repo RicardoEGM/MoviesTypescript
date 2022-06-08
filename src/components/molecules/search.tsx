@@ -38,6 +38,14 @@ export const Search = forwardRef(
       searchFunction();
     };
 
+    const keyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      
+      if (event.key === "Enter") {
+        event.preventDefault(); // prevent form submit
+        handleSubmit();
+      }
+    }
+
     return (
       <Paper
         component="form"
@@ -55,6 +63,7 @@ export const Search = forwardRef(
           name="search"
           value={state}
           onChange={handleChange}
+          onKeyPress={keyPress }
         />
         <IconButton
           type="button"

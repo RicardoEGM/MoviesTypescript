@@ -11,7 +11,7 @@ import {
 import { Movies } from "../../../models/interface/Movies";
 import DetailsMovies from "../../molecules/detailMovies";
 
-export default function RecipeReviewCard() {
+export default function MoviesView() {
   const SearchRef = useRef<RefObject>(null);
   const DetailMoviesRef = useRef<RefDetailMovies>(null);
   const [state, setState] = useState<Movies[]>([]);
@@ -22,7 +22,11 @@ export default function RecipeReviewCard() {
     SearchRef.current
       ?.SearchHandle()
       .then((data: Movies[]) => {
-        setState(data);
+        let copy = [...data];
+        copy.splice(0,copy.length);
+        copy.push(...data);
+
+        setState([...copy]);
       })
       .catch((err: any) => {
         console.log(err);
@@ -42,8 +46,8 @@ export default function RecipeReviewCard() {
         <Grid container spacing={2} columns={16}>
           {state.length > 0 ? (
             state.map((data: Movies) => (
-              <Grid item xs={3}>
-                <CardMovies data={data} ref={DetailMoviesRef} select={Select} />
+              <Grid item xs={3} >
+                <CardMovies data={data} ref={DetailMoviesRef} select={Select} key={`movie-${Math.random}`} />
               </Grid>
             ))
           ) : (
